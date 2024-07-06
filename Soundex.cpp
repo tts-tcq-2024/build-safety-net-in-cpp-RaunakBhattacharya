@@ -22,12 +22,14 @@ bool shouldAppendCode(char code, char prevCode) {
 
 std::string generateSoundexCode(const std::string& name, char& prevCode) {
     std::string soundexCode;
-    for (size_t i = 1; i < name.length() && soundexCode.length() < 3; ++i) {
+    size_t i = 1;
+    while (i < name.length() && soundexCode.length() < 3) {
         char code = getSoundexCode(name[i]);
         if (shouldAppendCode(code, prevCode)) {
             soundexCode += code;
             prevCode = code;
         }
+        i++;
     }
     return soundexCode;
 }
