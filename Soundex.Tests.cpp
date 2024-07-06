@@ -1,34 +1,46 @@
-#include <gtest/gtest.h>
 #include "Soundex.h"
+#include <gtest/gtest.h>
 
-TEST(SoundexTest, HandlesEmptyString) {
-    EXPECT_EQ(generateSoundex(""), "");
+TEST(SoundexTest, ReturnsEmptyStringWhenInputIsEmpty) {
+    ASSERT_EQ(generateSoundex(""), "");
 }
 
-TEST(SoundexTest, ConvertsNamesToUpperCase) {
-    EXPECT_EQ(generateSoundex("name"), "N500");
+TEST(SoundexTest, ReturnsPaddedZerosWhenInputIsSingleCharacter) {
+    ASSERT_EQ(generateSoundex("A"), "A000");
 }
 
 TEST(SoundexTest, IgnoresNonAlphabeticCharacters) {
-    EXPECT_EQ(generateSoundex("N123"), "N000");
+    ASSERT_EQ(generateSoundex("A#"), "A000");
 }
 
-TEST(SoundexTest, LimitsLengthToFourCharacters) {
-    EXPECT_EQ(generateSoundex("Nemetz"), "N532");
+TEST(SoundexTest, ConvertsLowerCaseCharactersToUpperCase) {
+    ASSERT_EQ(generateSoundex("a"), "A000");
+}
+
+TEST(SoundexTest, ReplacesConsonantsWithAppropriateDigits) {
+    ASSERT_EQ(generateSoundex("Ab"), "A100");
 }
 
 TEST(SoundexTest, IgnoresVowelLikeLetters) {
-    EXPECT_EQ(generateSoundex("BaAeEiIoOuUhHyYcdl"), "B234");
+    ASSERT_EQ(generateSoundex("Aa"), "A000");
 }
 
 TEST(SoundexTest, CombinesDuplicateEncodings) {
-    EXPECT_EQ(generateSoundex("Abfcgdt"), "A123");
+    ASSERT_EQ(generateSoundex("Acdl"), "A234");
 }
 
-TEST(SoundexTest, UppercasesFirstLetter) {
-    EXPECT_EQ(generateSoundex("abcd"), "A123");
+TEST(SoundexTest, LimitsLengthToFourCharacters) {
+    ASSERT_EQ(generateSoundex("Dcdlb"), "D234");
 }
 
-TEST(SoundexTest, IgnoresCaseWhenEncodingConsonants) {
-    EXPECT_EQ(generateSoundex("BCDL"), generateSoundex("Bcdl"));
+TEST(SoundexTest, IgnoresVowelLikeLettersAfterFirstLetter) {
+    ASSERT_EQ(generateSoundex("BaAeiouhycdl"), "B234");
+}
+
+TEST(SoundexTest, CombinesDuplicateCodesWhen2ndLetterDuplicates1st) {
+    ASSERT_EQ(generateSoundex("Bbcd"), "B230");
+}
+
+TEST(SoundexTest, DoesNotCombineDuplicateEncodingsSeparatedByVowels) {
+    ASSERT_EQ(generateSoundex("Jbob"), "J110");
 }
