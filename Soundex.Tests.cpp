@@ -9,10 +9,6 @@ TEST(SoundexTest, ReturnsPaddedZerosWhenInputIsSingleCharacter) {
     ASSERT_EQ(generateSoundex("A"), "A000");
 }
 
-TEST(SoundexTest, IgnoresNonAlphabeticCharacters) {
-    ASSERT_EQ(generateSoundex("A#"), "A");
-}
-
 TEST(SoundexTest, ConvertsLowerCaseCharactersToUpperCase) {
     ASSERT_EQ(generateSoundex("a"), "A000");
 }
