@@ -20,15 +20,21 @@ bool shouldAppendCode(char code, char prevCode) {
     return code != '0' && code != prevCode;
 }
 
+std::string appendCodeIfValid(const std::string& name, size_t& i, char& prevCode) {
+    std::string soundexCode;
+    char code = getSoundexCode(name[i]);
+    if (shouldAppendCode(code, prevCode)) {
+        soundexCode += code;
+        prevCode = code;
+    }
+    return soundexCode;
+}
+
 std::string generateSoundexCode(const std::string& name, char& prevCode) {
     std::string soundexCode;
     size_t i = 1;
     while (i < name.length() && soundexCode.length() < 3) {
-        char code = getSoundexCode(name[i]);
-        if (shouldAppendCode(code, prevCode)) {
-            soundexCode += code;
-            prevCode = code;
-        }
+        soundexCode += appendCodeIfValid(name, i, prevCode);
         i++;
     }
     return soundexCode;
