@@ -16,11 +16,15 @@ char getSoundexCode(char c) {
     return soundexTable[toupper(c) - 'A'];
 }
 
+bool shouldAppendCode(char code, char prevCode) {
+    return code != '0' && code != prevCode;
+}
+
 std::string generateSoundexCode(const std::string& name, char& prevCode) {
     std::string soundexCode;
     for (size_t i = 1; i < name.length() && soundexCode.length() < 3; ++i) {
         char code = getSoundexCode(name[i]);
-        if (code != '0' && code != prevCode) {
+        if (shouldAppendCode(code, prevCode)) {
             soundexCode += code;
             prevCode = code;
         }
