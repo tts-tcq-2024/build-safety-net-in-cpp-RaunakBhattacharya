@@ -7,6 +7,10 @@ std::string padWithZeros(const std::string& str) {
     return str + std::string(zerosNeeded, '0');
 }
 
+char getSoundexCode(char c) {
+    return soundexTable[toupper(c) - 'A'];
+}
+
 std::string generateSoundex(const std::string& name) {
     if (name.empty()) return "";
 
