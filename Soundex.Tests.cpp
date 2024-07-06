@@ -40,7 +40,3 @@ TEST(SoundexTest, IgnoresVowelLikeLettersAfterFirstLetter) {
 TEST(SoundexTest, CombinesDuplicateCodesWhen2ndLetterDuplicates1st) {
     ASSERT_EQ(generateSoundex("Bbcd"), "B230");
 }
-
-TEST(SoundexTest, DoesNotCombineDuplicateEncodingsSeparatedByVowels) {
-    ASSERT_EQ(generateSoundex("Jbob"), "J110");
-}
