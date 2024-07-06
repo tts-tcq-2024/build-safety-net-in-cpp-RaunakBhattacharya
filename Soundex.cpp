@@ -1,3 +1,7 @@
+#include "Soundex.h"
+#include <cctype>
+#include <string>
+
 std::string padWithZeros(const std::string& str) {
     auto zerosNeeded = 4 - str.length();
     return str + std::string(zerosNeeded, '0');
