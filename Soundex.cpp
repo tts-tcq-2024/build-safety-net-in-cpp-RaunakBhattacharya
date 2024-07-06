@@ -7,6 +7,14 @@ std::string padWithZeros(const std::string& str) {
     return str + std::string(zerosNeeded, '0');
 }
 
+std::array<char, 26> soundexTable = {
+    '0', '1', '2', '3', '0', '1', '2', '0', '0', '2', '2', '4', '5', '5', '0', '1', '2', '6', '2', '3', '0', '1', '0', '2', '0', '2'
+};
+
+char getSoundexCode(char c) {
+    return soundexTable[toupper(c) - 'A'];
+}
+
 std::string generateSoundexCode(const std::string& name, char& prevCode) {
     std::string soundexCode;
     for (size_t i = 1; i < name.length() && soundexCode.length() < 3; ++i) {
