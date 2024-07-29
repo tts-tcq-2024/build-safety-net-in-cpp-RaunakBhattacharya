@@ -1,17 +1,43 @@
 #include "Soundex.h"
 #include <cctype>
+#include <string>
+#include <array>
+
+std::string padWithZeros(const std::string& str) {
+    auto zerosNeeded = 4 - str.length();
+    return str + std::string(zerosNeeded, '0');
+}
+
+std::array<char, 26> soundexTable = {
+    '0', '1', '2', '3', '0', '1', '2', '0', '0', '2', '2', '4', '5', '5', '0', '1', '2', '6', '2', '3', '0', '1', '0', '2', '0', '2'
+};
 
 char getSoundexCode(char c) {
-    c = toupper(c);
-    switch (c) {
-        case 'B': case 'F': case 'P': case 'V': return '1';
-        case 'C': case 'G': case 'J': case 'K': case 'Q': case 'S': case 'X': case 'Z': return '2';
-        case 'D': case 'T': return '3';
-        case 'L': return '4';
-        case 'M': case 'N': return '5';
-        case 'R': return '6';
-        default: return '0'; // For A, E, I, O, U, H, W, Y
+    return soundexTable[toupper(c) - 'A'];
+}
+
+bool shouldAppendCode(char code, char prevCode) {
+    return code != '0' && code != prevCode;
+}
+
+std::string appendCodeIfValid(const std::string& name, size_t& i, char& prevCode) {
+    std::string soundexCode;
+    char code = getSoundexCode(name[i]);
+    if (shouldAppendCode(code, prevCode)) {
+        soundexCode += code;
+        prevCode = code;
     }
+    return soundexCode;
+}
+
+std::string generateSoundexCode(const std::string& name, char& prevCode) {
+    std::string soundexCode;
+    size_t i = 1;
+    while (i < name.length() && soundexCode.length() < 3) {
+        soundexCode += appendCodeIfValid(name, i, prevCode);
+        i++;
+    }
+    return soundexCode;
 }
 
 std::string generateSoundex(const std::string& name) {
@@ -20,17 +46,7 @@ std::string generateSoundex(const std::string& name) {
     std::string soundex(1, toupper(name[0]));
     char prevCode = getSoundexCode(name[0]);
 
-    for (size_t i = 1; i < name.length() && soundex.length() < 4; ++i) {
-        char code = getSoundexCode(name[i]);
-        if (code != '0' && code != prevCode) {
-            soundex += code;
-            prevCode = code;
-        }
-    }
+    soundex += generateSoundexCode(name, prevCode);
 
-    while (soundex.length() < 4) {
-        soundex += '0';
-    }
-
-    return soundex;
+    return padWithZeros(soundex);
 }
